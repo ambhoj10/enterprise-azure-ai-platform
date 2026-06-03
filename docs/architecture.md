@@ -17,3 +17,30 @@
 - OpenTelemetry
 - Azure Monitor
 - Application Insights
+
+User
+ │
+ ▼
+
+FastAPI Backend
+ │
+ ├──────────────┐
+ │              │
+ ▼              ▼
+
+Azure AI Search   Blob Storage
+
+ │
+ ▼
+
+Azure OpenAI
+
+ │
+ ▼
+
+Application Insights
+
+ │
+ ▼
+
+Azure Monitor
