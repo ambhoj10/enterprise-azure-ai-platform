@@ -1,54 +1,27 @@
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
+from pydantic_settings import BaseSettings
 
 
-class Settings:
+class Settings(BaseSettings):
 
     # Azure OpenAI
-
-    AZURE_OPENAI_ENDPOINT = os.getenv(
-        "AZURE_OPENAI_ENDPOINT"
-    )
-
-    AZURE_OPENAI_API_KEY = os.getenv(
-        "AZURE_OPENAI_API_KEY"
-    )
-
-    AZURE_OPENAI_DEPLOYMENT = os.getenv(
-        "AZURE_OPENAI_DEPLOYMENT"
-    )
+    AZURE_OPENAI_ENDPOINT: str
+    AZURE_OPENAI_API_KEY: str
+    AZURE_OPENAI_DEPLOYMENT: str
 
     # Azure AI Search
-
-    AZURE_SEARCH_ENDPOINT = os.getenv(
-        "AZURE_SEARCH_ENDPOINT"
-    )
-
-    AZURE_SEARCH_API_KEY = os.getenv(
-        "AZURE_SEARCH_API_KEY"
-    )
-
-    AZURE_SEARCH_INDEX = os.getenv(
-        "AZURE_SEARCH_INDEX"
-    )
+    AZURE_SEARCH_ENDPOINT: str
+    AZURE_SEARCH_API_KEY: str
+    AZURE_SEARCH_INDEX: str
 
     # Azure Storage
-
-    AZURE_STORAGE_CONNECTION_STRING = os.getenv(
-        "AZURE_STORAGE_CONNECTION_STRING"
-    )
-
-    AZURE_STORAGE_CONTAINER = os.getenv(
-        "AZURE_STORAGE_CONTAINER"
-    )
+    AZURE_STORAGE_CONNECTION_STRING: str
+    AZURE_STORAGE_CONTAINER: str
 
     # Application Insights
+    APPLICATIONINSIGHTS_CONNECTION_STRING: str = ""
 
-    APPLICATIONINSIGHTS_CONNECTION_STRING = os.getenv(
-        "APPLICATIONINSIGHTS_CONNECTION_STRING"
-    )
+    class Config:
+        env_file = ".env"
 
 
 settings = Settings()

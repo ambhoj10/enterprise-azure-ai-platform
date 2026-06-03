@@ -9,6 +9,7 @@ from azure.search.documents.indexes import (
 from azure.search.documents.indexes.models import (
     SearchIndex,
     SimpleField,
+    SearchableField,
     SearchFieldDataType
 )
 
@@ -34,11 +35,13 @@ class SearchService:
                 type=SearchFieldDataType.String,
                 key=True
             ),
-            SimpleField(
+
+            SearchableField(
                 name="file_name",
                 type=SearchFieldDataType.String
             ),
-            SimpleField(
+
+            SearchableField(
                 name="content",
                 type=SearchFieldDataType.String
             )
@@ -90,3 +93,34 @@ class SearchService:
         )
 
         return result
+
+    def search_documents(
+        self,
+        query
+    ):
+
+        search_client = self.get_search_client()
+
+        results = search_client.search(
+            search_text=query,
+            top=3
+        )
+
+        documents = []
+
+        for result in results:
+
+            documents.append(
+                {
+                    "file_name": result.get(
+                        "file_name",
+                        ""
+                    ),
+                    "content": result.get(
+                        "content",
+                        ""
+                    )
+                }
+            )
+
+        return documents
