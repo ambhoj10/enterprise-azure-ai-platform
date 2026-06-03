@@ -2,58 +2,78 @@
 
 ## Overview
 
-Enterprise Azure AI Platform is a cloud-native AI platform built on Microsoft Azure that demonstrates enterprise-grade AI application development, platform engineering, observability, and cloud architecture practices.
+Enterprise Azure AI Platform is a cloud-native AI knowledge assistant built using Azure OpenAI, Azure AI Search, Azure Blob Storage, and FastAPI.
 
-The platform integrates Azure OpenAI, Azure AI Search, Azure Blob Storage, Application Insights, and Azure Monitor to deliver secure, scalable, and observable AI-powered experiences.
-
----
-
-## Project Objectives
-
-* Build an Azure-native AI platform using modern cloud architecture principles.
-* Implement Retrieval-Augmented Generation (RAG) workflows.
-* Integrate Azure AI Search for enterprise knowledge retrieval.
-* Implement enterprise observability using Azure Monitor and Application Insights.
-* Demonstrate Platform Engineering and Cloud Engineering best practices.
-* Provide a production-style reference architecture for enterprise AI applications.
+The platform supports document ingestion, indexing, retrieval, and Retrieval-Augmented Generation (RAG) workflows to provide AI-powered answers grounded in enterprise knowledge sources.
 
 ---
 
 ## Architecture
 
 ```text
-User
- │
- ▼
+                        User
+                          │
+                          ▼
 
-FastAPI Application
+                      FastAPI
 
- │
- ├──────────────┐
- │              │
- ▼              ▼
+          ┌─────────────┼─────────────┐
+          │             │             │
+          ▼             ▼             ▼
 
-Azure AI Search   Azure Blob Storage
+    Azure OpenAI   Azure AI Search   Blob Storage
 
- │
- ▼
+          │             │             │
+          └─────────────┼─────────────┘
+                        │
+                        ▼
 
-Azure OpenAI
+                Enterprise Documents
 
- │
- ▼
-
-Application Insights
-
- │
- ▼
-
-Azure Monitor
+                TXT / PDF Knowledge Base
 ```
 
 ---
 
+## Key Features
+
+### AI Capabilities
+
+* Azure OpenAI GPT-4o-mini integration
+* Retrieval-Augmented Generation (RAG)
+* Context-aware AI responses
+* Source citations
+* Hallucination reduction through prompt grounding
+
+### Search Capabilities
+
+* Azure AI Search integration
+* Full-text document search
+* Top-K retrieval strategy
+* Searchable document indexing
+
+### Document Processing
+
+* TXT document ingestion
+* PDF document ingestion
+* Automatic text extraction
+* Search index population
+
+### Platform Capabilities
+
+* FastAPI REST APIs
+* Health monitoring endpoint
+* Modular service architecture
+* Environment-based configuration
+
+---
+
 ## Technology Stack
+
+### Backend
+
+* Python
+* FastAPI
 
 ### Azure Services
 
@@ -62,82 +82,236 @@ Azure Monitor
 * Azure Blob Storage
 * Azure Monitor
 * Application Insights
+* Log Analytics Workspace
 
-### Backend
+### AI Components
 
-* Python
-* FastAPI
-* Pydantic
+* GPT-4o-mini
+* Retrieval-Augmented Generation (RAG)
 
-### Observability
+### Document Processing
 
-* OpenTelemetry
-* Azure Monitor
-* Application Insights
-
-### Infrastructure
-
-* Terraform
-* Azure DevOps
-* GitHub Actions
+* PyPDF
+* Azure Search SDK
 
 ---
 
 ## Project Structure
 
 ```text
-enterprise-azure-ai-platform/
-
-├── api/
-├── app/
-├── docs/
-├── infrastructure/
-├── models/
-├── observability/
-├── services/
-├── tests/
-├── README.md
-└── requirements.txt
+enterprise-azure-ai-platform
+│
+├── api
+│   └── routes.py
+│
+├── app
+│   ├── config.py
+│   └── main.py
+│
+├── models
+│   └── chat.py
+│
+├── services
+│   ├── storage_service.py
+│   ├── search_service.py
+│   ├── openai_service.py
+│   └── document_parser.py
+│
+├── observability
+│   └── telemetry.py
+│
+├── docs
+│   ├── architecture.md
+│   └── screenshots
+│
+├── infrastructure
+│   ├── scripts
+│   └── terraform
+│
+├── requirements.txt
+└── README.md
 ```
 
 ---
 
-## Current Status
+## API Endpoints
 
-### Week 12 – Day 1
+### Platform
 
-Completed:
+```http
+GET /
+```
 
-* Project Initialization
-* FastAPI Setup
-* Repository Structure
-* Documentation Structure
-* Terraform Structure
+Returns platform status.
 
-Upcoming:
+```http
+GET /health
+```
 
-* Azure Resource Provisioning
+Returns health status.
+
+---
+
+### Document Management
+
+```http
+POST /upload
+```
+
+Upload document to Azure Blob Storage.
+
+```http
+POST /search/index
+```
+
+Create Azure AI Search index.
+
+```http
+POST /search/document
+```
+
+Index TXT and PDF documents into Azure AI Search.
+
+---
+
+### AI Assistant
+
+```http
+POST /chat
+```
+
+Ask questions against indexed enterprise documents.
+
+Example:
+
+```json
+{
+  "question": "What is Generative AI?"
+}
+```
+
+Response:
+
+```json
+{
+  "question": "What is Generative AI?",
+  "answer": "Generative AI is ...",
+  "sources": [
+    "GEN-AI_for_beginners_to_pro.pdf"
+  ]
+}
+```
+
+---
+
+## Azure Resources
+
+### Azure OpenAI
+
+* GPT-4o-mini Deployment
+
+### Azure AI Search
+
+* documents-index
+
+### Azure Storage Account
+
+* documents container
+
+### Monitoring
+
+* Application Insights
+* Log Analytics Workspace
+
+---
+
+## Environment Variables
+
+Create a `.env` file:
+
+```env
+AZURE_OPENAI_ENDPOINT=
+AZURE_OPENAI_API_KEY=
+AZURE_OPENAI_DEPLOYMENT=
+
+AZURE_SEARCH_ENDPOINT=
+AZURE_SEARCH_API_KEY=
+AZURE_SEARCH_INDEX=
+
+AZURE_STORAGE_CONNECTION_STRING=
+AZURE_STORAGE_CONTAINER=
+
+APPLICATIONINSIGHTS_CONNECTION_STRING=
+```
+
+---
+
+## Installation
+
+Clone repository:
+
+```bash
+git clone <repository-url>
+cd enterprise-azure-ai-platform
+```
+
+Create virtual environment:
+
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Start application:
+
+```bash
+uvicorn app.main:app --reload
+```
+
+Open Swagger UI:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+---
+
+## Completed Capabilities
+
 * Azure OpenAI Integration
 * Azure AI Search Integration
-* Blob Storage Integration
-* Observability Integration
+* Azure Blob Storage Integration
+* RAG Workflow
+* Source Citations
+* TXT Ingestion
+* PDF Ingestion
+* FastAPI APIs
+* Enterprise Knowledge Assistant
 
 ---
 
 ## Future Enhancements
 
-* Enterprise RAG Pipeline
-* Agentic AI Workflows
-* MCP Integration
-* AKS Deployment
-* CI/CD Automation
-* Enterprise Monitoring Dashboards
+* Azure Monitor Dashboards
+* Application Insights Telemetry
+* Vector Search
+* Hybrid Search
+* Semantic Ranking
+* Multi-Agent Architecture
+* Model Context Protocol (MCP)
+* GitHub Actions CI/CD
+* Azure Container Apps Deployment
 
 ---
 
 ## Author
 
-Amboj Kumar Upadhyay
+Ambhoj Kumar
 
 Cloud & AI Platform Engineer
-
